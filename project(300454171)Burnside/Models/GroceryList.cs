@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace project300454171Burnside.Models
 {
-    public class GroceryItem
+    public class GroceryList
     {
-    public int Id { get; set; }
-    public int userId { get; set; }
+    public string GroceryListId { get; set; }
+    public string UserId { get; set; }
     [Required]
     public string GroceryName { get; set; }
         [DefaultValue(1)]
-    public int Quantity { get; set; }
+    public string Quantity { get; set; }
+
+    public bool Shareable { get; set; }
     }
 }

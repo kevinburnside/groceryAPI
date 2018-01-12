@@ -19,7 +19,8 @@ namespace project_300454171_Burnside
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GroceryContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("GroceryContext")));
+          //  services.AddDbContext<GroceryContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("GroceryContext")));
+  
             services.AddMvc();
 
             // Register the swagger generator

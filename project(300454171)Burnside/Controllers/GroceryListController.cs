@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using project300454171Burnside.Models;
+using Google.Cloud.Datastore.V1;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,48 +14,76 @@ namespace project300454171Burnside.Controllers
     [Route("/groceries")]
 public class GroceryListController : Controller
 {
-    private readonly Models.GroceryContext _context;
+        private DatastoreDb _db;
+        private KeyFactory _keyFactory;
+        private string projectId;
+        private GroceryList gl = new GroceryList();
+
+
     public GroceryListController(GroceryContext context)
     {
-        _context = context;
-
-        if (_context.GroceryItems.Count() == 0)
-        {
-            _context.GroceryItems.Add(new GroceryItem { GroceryName = "Apples" });
-            _context.SaveChanges();
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-812dcc062ed5.json");
+            projectId = "cellular-datum-186719";
+            _db = DatastoreDb.Create(projectId);
+            _keyFactory = _db.CreateKeyFactory("GroceryList");
+            
         }
-    }
     [HttpGet]
     public IEnumerable<GroceryItem> GetAll()
     {
-        return _context.GroceryItems.ToList();
+        
     }
 
     [HttpGet("{id}", Name = "GetGroceries")]
     public IActionResult GetById(int id)
     {
-        var groceryItem = _context.GroceryItems.FirstOrDefault(i => i.Id == id);
-        if (groceryItem == null)
-        {
-            return NotFound();
-        }
-        return new ObjectResult(groceryItem);
+
     }
-
-    [HttpPost]
-    public IActionResult Create([FromBody] GroceryItem item)
-    {
-        if (item == null)
+        // creates a new grocery list
+        [HttpPost("/newList")]
+        public void CreateNewList(String userId, [FromBody] GroceryList item)
         {
-            return BadRequest();
+            Key key = _keyFactory.CreateKey(new Random().Next());
+            Entity groceryList = new Entity()
+            {
+                Key = _keyFactory.CreateIncompleteKey(),
+                ["GroceryListId"] = gl.GroceryListId,
+                ["groceryItem"] = gl.GroceryName,
+                ["UserId"] = gl.UserId,
+                ["quantity"] = gl.Quantity,
+                ["shareable"] = gl.Shareable
+            };
+           this. _db.Insert(groceryList);
+
+            //TODO figure out how to return the full grocery list
         }
-        _context.GroceryItems.Add(item);
-        _context.SaveChanges();
+        // adds an item to a selected grocery list
+        [HttpPost("{id}/item")]
+        public void AddItemToList(String userId, [FromBody] GroceryList item)
+        {
+            Key key = _keyFactory.CreateKey(new Random().Next());
+            Entity groceryList = new Entity()
+            {
+                Key = _keyFactory.CreateIncompleteKey(),
+                ["GroceryListId"] = gl.GroceryListId,
+                ["groceryItem"] = gl.GroceryName,
+                ["UserId"] = gl.UserId,
+                ["quantity"] = gl.Quantity,
+                ["shareable"] = gl.Shareable
+            };
+            this._db.Insert(groceryList);
 
-        return CreatedAtRoute("GetGrocery", new { id = item.Id }, item);
-    }
+            // TODO figure out how to return the grocery list, or a success message
+        }
+        // Deletes the selected grocery item
+        [HttpDelete("/{groceryListId}/{groceryName}")]
+        public string deleteGroceryItem(string groceryId, string groceryName)
+        {
+            _db.Delete(keyFactory.CreateKey(groceryId && groceryName));
+        }
+            
 
-    [HttpPut("{id}")]
+        [HttpPut("{id}")]
     public IActionResult Update(int id, [FromBody] GroceryItem item)
     {
         if (item == null || item.Id != id)

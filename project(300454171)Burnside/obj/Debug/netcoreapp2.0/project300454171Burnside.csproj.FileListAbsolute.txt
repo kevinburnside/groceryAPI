@@ -8,3 +8,4 @@ C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnsid
 C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.AssemblyInfo.cs
 C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.dll
 C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.pdb
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.csprojResolveAssemblyReference.cache
