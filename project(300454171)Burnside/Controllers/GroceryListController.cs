@@ -10,7 +10,6 @@ using Google.Cloud.Datastore.V1;
 
 namespace project300454171Burnside.Controllers
 {
-    [Produces("application.json")]
     [Route("/groceries")]
 public class GroceryListController : Controller
 {
@@ -20,7 +19,7 @@ public class GroceryListController : Controller
         private GroceryList gl = new GroceryList();
 
 
-    public GroceryListController(GroceryContext context)
+    public GroceryListController()
     {
             System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\arlin\\Desktop\\what-am-i-calling-this-project-e1c237c4aa27.json");
             projectId = "what-am-i-calling-this-project";
@@ -29,10 +28,13 @@ public class GroceryListController : Controller
             
         }
     [HttpGet]
-    public void GetAll()
+    public IActionResult GetAll()
     {
          Query query = new Query("GroceryList");
-    }
+           //return _db.RunQuery(query).ToString();
+            JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
+            return jsonItem;
+        }
 
     [HttpGet("{id}", Name = "GetGroceries")]
     public IActionResult GetById(int id)
