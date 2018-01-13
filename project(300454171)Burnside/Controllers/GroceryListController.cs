@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using project300454171Burnside.Models;
 using Google.Cloud.Datastore.V1;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace project300454171Burnside.Controllers
@@ -22,8 +23,8 @@ public class GroceryListController : Controller
 
     public GroceryListController(GroceryContext context)
     {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-812dcc062ed5.json");
-            projectId = "cellular-datum-186719";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "what-am-i-calling-this-project-e1c237c4aa27.json");
+            projectId = "what-am-i-calling-this-project";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
             
@@ -37,8 +38,14 @@ public class GroceryListController : Controller
     [HttpGet("{id}", Name = "GetGroceries")]
     public IActionResult GetById(int id)
     {
-
-    }
+            Query query = new Query("GroceryList")
+            {
+                Filter = Filter.Equal("id", id)
+            };
+                JsonResult jsonItem = new JsonResult(query);
+                return jsonItem;
+            
+        }
         // creates a new grocery list
         [HttpPost("/newList")]
         public void CreateNewList(String userId, [FromBody] GroceryList item)
@@ -77,9 +84,9 @@ public class GroceryListController : Controller
         }
         // Deletes the selected grocery item
         [HttpDelete("/{groceryListId}/{groceryName}")]
-        public string deleteGroceryItem(string groceryId, string groceryName)
+        public void deleteGroceryItem(string groceryId, string groceryName)
         {
-            _db.Delete(keyFactory.CreateKey(groceryId && groceryName));
+            _db.Delete(_keyFactory.CreateKey(groceryId + groceryName));
         }
             
 
