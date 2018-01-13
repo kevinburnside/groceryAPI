@@ -22,23 +22,28 @@ public class GroceryListController : Controller
 
     public GroceryListController(GroceryContext context)
     {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-812dcc062ed5.json");
-            projectId = "cellular-datum-186719";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\arlin\\Desktop\\what-am-i-calling-this-project-e1c237c4aa27.json");
+            projectId = "what-am-i-calling-this-project";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
             
         }
     [HttpGet]
-    public IEnumerable<GroceryItem> GetAll()
+    public void GetAll()
     {
-        
+         Query query = new Query("GroceryList");
     }
 
     [HttpGet("{id}", Name = "GetGroceries")]
     public IActionResult GetById(int id)
     {
-
-    }
+            Query query = new Query("GroceryList")
+            {
+                Filter = Filter.Equal("id", id)
+            };
+            JsonResult jsonItem = new JsonResult(query);
+            return jsonItem;
+        }
         // creates a new grocery list
         [HttpPost("/newList")]
         public void CreateNewList(String userId, [FromBody] GroceryList item)
@@ -56,10 +61,11 @@ public class GroceryListController : Controller
            this. _db.Insert(groceryList);
 
             //TODO figure out how to return the full grocery list
+            //GetById(Key);
         }
         // adds an item to a selected grocery list
         [HttpPost("{id}/item")]
-        public void AddItemToList(String userId, [FromBody] GroceryList item)
+        public IActionResult AddItemToList(String userId, [FromBody] GroceryList item)
         {
             Key key = _keyFactory.CreateKey(new Random().Next());
             Entity groceryList = new Entity()
@@ -74,35 +80,37 @@ public class GroceryListController : Controller
             this._db.Insert(groceryList);
 
             // TODO figure out how to return the grocery list, or a success message
+            JsonResult jsonItem = new JsonResult(this._db.Insert(groceryList));
+            return jsonItem;
         }
         // Deletes the selected grocery item
         [HttpDelete("/{groceryListId}/{groceryName}")]
-        public string deleteGroceryItem(string groceryId, string groceryName)
+        public void deleteGroceryItem(string groceryId, string groceryName)
         {
-            _db.Delete(keyFactory.CreateKey(groceryId && groceryName));
+            _db.Delete(_keyFactory.CreateKey(groceryId + groceryName));
         }
             
 
-        [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] GroceryItem item)
-    {
-        if (item == null || item.Id != id)
-        {
-            return BadRequest();
-        }
-        var groceryItem = _context.GroceryItems.FirstOrDefault(g => g.Id == id);
-        if(groceryItem == null)
-        {
-            return NotFound();
-        }
+    //    [HttpPut("{id}")]
+    //public IActionResult Update(int id, [FromBody] GroceryItem item)
+    //{
+    //    if (item == null || item.Id != id)
+    //    {
+    //        return BadRequest();
+    //    }
+    //    var groceryItem = _context.GroceryItems.FirstOrDefault(g => g.Id == id);
+    //    if(groceryItem == null)
+    //    {
+    //        return NotFound();
+    //    }
 
-        groceryItem.GroceryName = item.GroceryName;
-        groceryItem.Quantity = item.Quantity;
+    //    groceryItem.GroceryName = item.GroceryName;
+    //    groceryItem.Quantity = item.Quantity;
 
-        _context.GroceryItems.Update(groceryItem);
-        _context.SaveChanges();
-        return new NoContentResult();
-    }
+    //    _context.GroceryItems.Update(groceryItem);
+    //    _context.SaveChanges();
+    //    return new NoContentResult();
+    //}
 }
 }
 
