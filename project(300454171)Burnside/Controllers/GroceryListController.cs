@@ -11,7 +11,7 @@ using Google.Cloud.Datastore.V1;
 
 namespace project300454171Burnside.Controllers
 {
-    
+    [Produces("application.json")]
     [Route("/groceries")]
 public class GroceryListController : Controller
 {
