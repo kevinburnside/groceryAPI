@@ -19,25 +19,27 @@ public class GroceryListController : Controller
         private KeyFactory _keyFactory;
         private string projectId;
         private GroceryList gl = new GroceryList();
-        private readonly GroceryContext _context;
+       // private readonly GroceryContext _context;
 
 
-    public GroceryListController(GroceryContext context)
-    {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "..\\what-am-i-calling-this-project-e1c237c4aa27.json");
-            projectId = "what-am-i-calling-this-project";
+    public GroceryListController()
+          //  public GroceryListController(GroceryContext context)
+        {
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-812dcc062ed5.json");
+            projectId = "cellular-datum-186719";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
-            _context = context;
+            //_context = context;
             
         }
     [HttpGet]
-    public IEnumerable<GroceryList> GetAll()
+    public void GetAll()
     {
             Query query = new Query("GroceryList");
             //JsonResult jsonItem = new JsonResult(query);
             //return jsonItem;
-            return _context.GroceryItems.ToList();
+            
+            //return _context.GroceryItems.ToList();
             
     }
 
