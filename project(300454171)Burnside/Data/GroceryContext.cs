@@ -8,10 +8,12 @@ namespace project300454171Burnside.Models
 {
     public class GroceryContext : DbContext
     {
-    public GroceryContext(DbContextOptions<GroceryContext> options)
-        : base(options)
-    {
-    }
-    public DbSet<GroceryItem> GroceryItems { get; set; }
+        public GroceryContext(DbContextOptions<GroceryContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<GroceryList> GroceryItems { get; set; }
+        
     }
 }

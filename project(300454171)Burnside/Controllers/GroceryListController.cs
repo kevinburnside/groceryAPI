@@ -11,7 +11,7 @@ using Google.Cloud.Datastore.V1;
 
 namespace project300454171Burnside.Controllers
 {
-    [Produces("application.json")]
+    
     [Route("/groceries")]
 public class GroceryListController : Controller
 {
@@ -19,20 +19,26 @@ public class GroceryListController : Controller
         private KeyFactory _keyFactory;
         private string projectId;
         private GroceryList gl = new GroceryList();
+        private readonly GroceryContext _context;
 
 
     public GroceryListController(GroceryContext context)
     {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "what-am-i-calling-this-project-e1c237c4aa27.json");
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "..\\what-am-i-calling-this-project-e1c237c4aa27.json");
             projectId = "what-am-i-calling-this-project";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
+            _context = context;
             
         }
     [HttpGet]
-    public IEnumerable<GroceryItem> GetAll()
+    public IEnumerable<GroceryList> GetAll()
     {
-        
+            Query query = new Query("GroceryList");
+            //JsonResult jsonItem = new JsonResult(query);
+            //return jsonItem;
+            return _context.GroceryItems.ToList();
+            
     }
 
     [HttpGet("{id}", Name = "GetGroceries")]
@@ -63,10 +69,11 @@ public class GroceryListController : Controller
            this. _db.Insert(groceryList);
 
             //TODO figure out how to return the full grocery list
+            GetAll();
         }
         // adds an item to a selected grocery list
         [HttpPost("{id}/item")]
-        public void AddItemToList(String userId, [FromBody] GroceryList item)
+        public IActionResult AddItemToList(String userId, [FromBody] GroceryList item)
         {
             Key key = _keyFactory.CreateKey(new Random().Next());
             Entity groceryList = new Entity()
@@ -78,9 +85,11 @@ public class GroceryListController : Controller
                 ["quantity"] = gl.Quantity,
                 ["shareable"] = gl.Shareable
             };
-            this._db.Insert(groceryList);
 
             // TODO figure out how to return the grocery list, or a success message
+            JsonResult jsonItem = new JsonResult(this._db.Insert(groceryList));
+            return jsonItem;
+            
         }
         // Deletes the selected grocery item
         [HttpDelete("/{groceryListId}/{groceryName}")]
@@ -90,26 +99,39 @@ public class GroceryListController : Controller
         }
             
 
-        [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] GroceryItem item)
-    {
-        if (item == null || item.Id != id)
-        {
-            return BadRequest();
-        }
-        var groceryItem = _context.GroceryItems.FirstOrDefault(g => g.Id == id);
-        if(groceryItem == null)
-        {
-            return NotFound();
-        }
+ //      [HttpPut("{id}")]
+//    public IActionResult Update(int id, [FromBody] GroceryItem item)
+//    {
+//        if (item == null || item.Id != id)
+//        {
+//            return BadRequest();
+//        }
+//        var groceryItem = item.FirstOrDefault(g => g.Id == id);
+//        if(groceryItem == null)
+//        {
+//            return NotFound();
+//        }
 
-        groceryItem.GroceryName = item.GroceryName;
-        groceryItem.Quantity = item.Quantity;
+//        groceryItem.GroceryName = item.GroceryName;
+//        groceryItem.Quantity = item.Quantity;
 
-        _context.GroceryItems.Update(groceryItem);
-        _context.SaveChanges();
-        return new NoContentResult();
+//        //_context.GroceryItems.Update(groceryItem);
+//        //_context.SaveChanges();
+//        return new NoContentResult();
+//    }
+//}
+//    class GroceryItem
+//    {
+//        public string GroceryName { get; set; }
+//        public string Quantity { get; set; }
+ 
+//        public GroceryItem(string groceryName, string quantity)
+//        {
+//            GroceryName = groceryName;
+//            Quantity = quantity;
+
+//        }
     }
-}
+
 }
 

@@ -17,3 +17,6 @@ C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(
 C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.csproj.CoreCompileInputs.cache
 C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.AssemblyInfoInputs.cache
 C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.AssemblyInfo.cs
+C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\bin\Debug\netcoreapp2.0\project300454171Burnside.pdb
+C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.dll
+C:\Users\arlin\Documents\Centennial College\Semester 6\Cloud\groceryAPI\project(300454171)Burnside\obj\Debug\netcoreapp2.0\project300454171Burnside.pdb
