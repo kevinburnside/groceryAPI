@@ -31,9 +31,17 @@ public class GroceryListController : Controller
     public IActionResult GetAll()
     {
          Query query = new Query("GroceryList");
-           //return _db.RunQuery(query).ToString();
-            JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
-            return jsonItem;
+            //return _db.RunQuery(query).ToString();
+            List<GroceryList> GroceryLists = new List<GroceryList>();
+            
+           foreach (var entity in _db.RunQuery(query).Entities)
+            {
+                //string item = "";
+                //item = "GroceryId" + (string)entity["id"] + ",\nUserId: " + (string)entity["GroceryName"] + ",\nQuantity: " + (string)entity["Quantity"] + ",\nSharable: " + (string)entity["Sharable"];
+                GroceryLists.Add(new GroceryList() { GroceryListId = (string)entity["id"], UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Sharable"] });
+            }
+            JsonResult jsonItem = new JsonResult(GroceryLists);
+           return jsonItem;
         }
 
     [HttpGet("{id}", Name = "GetGroceries")]
@@ -43,7 +51,7 @@ public class GroceryListController : Controller
             {
                 Filter = Filter.Equal("id", id)
             };
-            JsonResult jsonItem = new JsonResult(query);
+            JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
             return jsonItem;
         }
         // creates a new grocery list
@@ -94,7 +102,7 @@ public class GroceryListController : Controller
             
 
     //    [HttpPut("{id}")]
-    //public IActionResult Update(int id, [FromBody] GroceryItem item)
+    //public IActionResult Update(int id, [FromBody] GroceryList item)
     //{
     //    if (item == null || item.Id != id)
     //    {
