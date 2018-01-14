@@ -36,22 +36,33 @@ public class GroceryListController : Controller
             
            foreach (var entity in _db.RunQuery(query).Entities)
             {
-                //string item = "";
-                //item = "GroceryId" + (string)entity["id"] + ",\nUserId: " + (string)entity["GroceryName"] + ",\nQuantity: " + (string)entity["Quantity"] + ",\nSharable: " + (string)entity["Sharable"];
-                GroceryLists.Add(new GroceryList() { GroceryListId = (string)entity["id"], UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Sharable"] });
+                
+                GroceryLists.Add(new GroceryList() { GroceryListId = entity.Key.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] });
             }
             JsonResult jsonItem = new JsonResult(GroceryLists);
            return jsonItem;
         }
 
     [HttpGet("{id}", Name = "GetGroceries")]
-    public IActionResult GetById(int id)
+    public IActionResult GetById(string key)
     {
             Query query = new Query("GroceryList")
-            {
-                Filter = Filter.Equal("id", id)
+           {
+                Filter = Filter.Equal("Key", key)
             };
-            JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
+
+            //Entity entity = _db.RunQuery(query).Entities.SingleOrDefault(); 
+            //JsonResult jsonItem = new JsonResult(new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] });
+            //JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
+            //return jsonItem;
+            List<GroceryList> GroceryLists = new List<GroceryList>();
+
+            foreach (var entity in _db.RunQuery(query).Entities)
+            {
+
+                GroceryLists.Add(new GroceryList() { GroceryListId = entity.Key.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] });
+            }
+            JsonResult jsonItem = new JsonResult(GroceryLists);
             return jsonItem;
         }
         // creates a new grocery list
