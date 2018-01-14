@@ -48,27 +48,14 @@ public class GroceryListController : Controller
     {
 
             Entity entity = _db.Lookup(_keyFactory.CreateKey(id));
-            //Query query = new Query("GroceryList")
-            //{
-            //    Filter = Filter.Equal("Key", id)
-            //};
-
-            ////Entity entity = _db.RunQuery(query).Entities.SingleOrDefault(); 
-            ////JsonResult jsonItem = new JsonResult(new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] });
-            ////JsonResult jsonItem = new JsonResult(_db.RunQuery(query));
-            ////return jsonItem;
-            //List<GroceryList> GroceryLists = new List<GroceryList>();
-
-
-
-                GroceryList item  = new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] };
+            GroceryList item  = new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] };
             
             JsonResult jsonItem = new JsonResult(item);
            return jsonItem;
         }
         // creates a new grocery list
         [HttpPost("/newList")]
-        public void CreateNewList(String userId, [FromBody] GroceryList item)
+        public IActionResult CreateNewList(String userId, [FromBody] GroceryList item)
         {
             Key key = _keyFactory.CreateKey(new Random().Next());
             Entity groceryList = new Entity()
@@ -80,10 +67,11 @@ public class GroceryListController : Controller
                 ["quantity"] = gl.Quantity,
                 ["shareable"] = gl.Shareable
             };
-           this. _db.Insert(groceryList);
+            this._db.Insert(groceryList);
 
             //TODO figure out how to return the full grocery list
-            //GetById(Key);
+            JsonResult jsonResult = new JsonResult(_db.Lookup(groceryList.Key));
+            return jsonResult;
         }
         // adds an item to a selected grocery list
         [HttpPost("{id}/item")]
