@@ -1,0 +1,10 @@
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\bin\Release\netcoreapp2.0\project300454171Burnside.deps.json
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\bin\Release\netcoreapp2.0\project300454171Burnside.runtimeconfig.json
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\bin\Release\netcoreapp2.0\project300454171Burnside.runtimeconfig.dev.json
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\bin\Release\netcoreapp2.0\project300454171Burnside.dll
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\bin\Release\netcoreapp2.0\project300454171Burnside.pdb
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Release\netcoreapp2.0\project300454171Burnside.csproj.CoreCompileInputs.cache
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Release\netcoreapp2.0\project300454171Burnside.AssemblyInfoInputs.cache
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Release\netcoreapp2.0\project300454171Burnside.AssemblyInfo.cs
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Release\netcoreapp2.0\project300454171Burnside.dll
+C:\Users\Kevin\source\repos\project(300454171)Burnside\project(300454171)Burnside\obj\Release\netcoreapp2.0\project300454171Burnside.pdb

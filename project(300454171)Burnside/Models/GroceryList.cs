@@ -10,6 +10,7 @@ namespace project300454171Burnside.Models
     public class GroceryList
     {
     public string GroceryListId { get; set; }
+    public string GroceryItemId { get; set; }
     public string UserId { get; set; }
     [Required]
     public string GroceryName { get; set; }

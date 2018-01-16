@@ -5,57 +5,58 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using project300454171Burnside.Models;
 using Google.Cloud.Datastore.V1;
+using Microsoft.AspNetCore.Http;
+using System.Transactions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace project300454171Burnside.Controllers
 {
     [Route("/groceries")]
-public class GroceryListController : Controller
-{
+    public class GroceryListController : Controller
+    {
         private DatastoreDb _db;
         private KeyFactory _keyFactory;
         private string projectId;
         private GroceryList gl = new GroceryList();
 
 
-    public GroceryListController()
-    {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\arlin\\Desktop\\what-am-i-calling-this-project-e1c237c4aa27.json");
-            projectId = "what-am-i-calling-this-project";
+        public GroceryListController()
+        {
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-5b01a7686bd6.json");
+            projectId = "cellular-datum-186719";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
-            
+
         }
-    [HttpGet]
-    public IActionResult GetAll()
-    {
-         Query query = new Query("GroceryList");
-            
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            Query query = new Query("GroceryList");
+
             List<GroceryList> GroceryLists = new List<GroceryList>();
-            
-           foreach (var entity in _db.RunQuery(query).Entities)
+
+            foreach (var entity in _db.RunQuery(query).Entities)
             {
-                
                 GroceryLists.Add(new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] });
             }
             JsonResult jsonItem = new JsonResult(GroceryLists);
-           return jsonItem;
+            return jsonItem;
         }
 
-    [HttpGet("{id}", Name = "GetGroceries")]
-    public IActionResult GetById(long id)
-    {
+        [HttpGet("{id}", Name = "GetGroceries")]
+        public IActionResult GetById(long id)
+        {
 
             Entity entity = _db.Lookup(_keyFactory.CreateKey(id));
-            GroceryList item  = new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] };
-            
+            GroceryList item = new GroceryList() { GroceryListId = entity.Key.Path[0].Id.ToString(), UserId = (string)entity["UserId"], GroceryName = (string)entity["GroceryName"], Quantity = (string)entity["Quantity"], Shareable = (bool)entity["Shareable"] };
+
             JsonResult jsonItem = new JsonResult(item);
-           return jsonItem;
+            return jsonItem;
         }
         // creates a new grocery list
         [HttpPost("/newList")]
-        public IActionResult CreateNewList(String userId, [FromBody] GroceryList item)
+        public ActionResult CreateNewList(String userId, [FromBody] GroceryList item)
         {
             Key key = _keyFactory.CreateKey(new Random().Next());
             Entity groceryList = new Entity()
@@ -99,28 +100,25 @@ public class GroceryListController : Controller
         {
             _db.Delete(_keyFactory.CreateKey(groceryId + groceryName));
         }
-            
+        
+      /*  [HttpPut("{id}")]
+        public void UpdateGroceryItem(string id, [FromBody] GroceryList item)
+        {
+             using (var transaction = _db.BeginTransaction())
+             {
+                Entity groceryItem = transaction.Lookup(_keyFactory.CreateKey(id));
+                 if (groceryItem != null)
+                 {
+                     groceryItem["groceryItem"] = gl.GroceryName;
+                     groceryItem["quantity"] = gl.Quantity;
+                     groceryItem["shareable"] = gl.Shareable;
+                     transaction.Update(groceryItem);
+                 };
+                transaction.Commit();
+              }   //end "using"
 
-    //    [HttpPut("{id}")]
-    //public IActionResult Update(int id, [FromBody] GroceryList item)
-    //{
-    //    if (item == null || item.Id != id)
-    //    {
-    //        return BadRequest();
-    //    }
-    //    var groceryItem = _context.GroceryItems.FirstOrDefault(g => g.Id == id);
-    //    if(groceryItem == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    groceryItem.GroceryName = item.GroceryName;
-    //    groceryItem.Quantity = item.Quantity;
-
-    //    _context.GroceryItems.Update(groceryItem);
-    //    _context.SaveChanges();
-    //    return new NoContentResult();
-    //}
+        }*/
+    }
 }
-}
+
 
