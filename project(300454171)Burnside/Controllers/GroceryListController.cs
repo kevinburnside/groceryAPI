@@ -23,8 +23,8 @@ namespace project300454171Burnside.Controllers
 
         public GroceryListController()
         {
-            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "E:\\Downloads\\My Project-5b01a7686bd6.json");
-            projectId = "cellular-datum-186719";
+            System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\Users\\arlin\\Desktop\\what-am-i-calling-this-project-e1c237c4aa27.json");
+            projectId = "what-am-i-calling-this-project";
             _db = DatastoreDb.Create(projectId);
             _keyFactory = _db.CreateKeyFactory("GroceryList");
 
@@ -56,17 +56,17 @@ namespace project300454171Burnside.Controllers
         }
         // creates a new grocery list
         [HttpPost("/newList")]
-        public ActionResult CreateNewList(String userId, [FromBody] GroceryList item)
+        public ActionResult CreateNewList([FromBody] GroceryList gl)
         {
             Key key = _keyFactory.CreateKey(new Random().Next());
             Entity groceryList = new Entity()
             {
                 Key = _keyFactory.CreateIncompleteKey(),
-                ["GroceryListId"] = gl.GroceryListId,
-                ["groceryItem"] = gl.GroceryName,
+                //["GroceryListId"] = gl.GroceryListId,
+                ["GroceryName"] = gl.GroceryName,
                 ["UserId"] = gl.UserId,
-                ["quantity"] = gl.Quantity,
-                ["shareable"] = gl.Shareable
+                ["Quantity"] = gl.Quantity,
+                ["Shareable"] = gl.Shareable
             };
             this._db.Insert(groceryList);
 
@@ -95,29 +95,31 @@ namespace project300454171Burnside.Controllers
             return jsonItem;
         }
         // Deletes the selected grocery item
-        [HttpDelete("/{groceryListId}/{groceryName}")]
-        public void deleteGroceryItem(string groceryId, string groceryName)
+        [HttpDelete("{id}/delete")]
+        public JsonResult deleteGroceryItem(long id)
         {
-            _db.Delete(_keyFactory.CreateKey(groceryId + groceryName));
+            _db.Delete(_keyFactory.CreateKey(id));
+            return new JsonResult("deleted");
+
         }
         
-      /*  [HttpPut("{id}")]
-        public void UpdateGroceryItem(string id, [FromBody] GroceryList item)
+        [HttpPut("{id}/update")]
+        public void UpdateGroceryItem(long id, [FromBody] GroceryList gl)
         {
              using (var transaction = _db.BeginTransaction())
              {
                 Entity groceryItem = transaction.Lookup(_keyFactory.CreateKey(id));
                  if (groceryItem != null)
                  {
-                     groceryItem["groceryItem"] = gl.GroceryName;
-                     groceryItem["quantity"] = gl.Quantity;
-                     groceryItem["shareable"] = gl.Shareable;
+                     groceryItem["GroceryName"] = gl.GroceryName;
+                     groceryItem["Quantity"] = gl.Quantity;
+                     groceryItem["Shareable"] = gl.Shareable;
                      transaction.Update(groceryItem);
                  };
                 transaction.Commit();
               }   //end "using"
 
-        }*/
+        }
     }
 }
 
